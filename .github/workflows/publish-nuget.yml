@@ -57,15 +57,6 @@ jobs:
         path: '**/TestResults/**/*.trx'
         reporter: dotnet-trx
     
-    - name: Upload coverage reports
-      uses: codecov/codecov-action@v4
-      if: success()
-      continue-on-error: true
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
 
   pack:
     needs: build-and-test
