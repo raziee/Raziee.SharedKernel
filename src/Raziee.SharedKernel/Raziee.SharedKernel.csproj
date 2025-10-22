@@ -1,17 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <PackageId>Raziee.SharedKernel</PackageId>
-    <Description>A robust and comprehensive Domain-Driven Design (DDD) foundation library for .NET applications, providing essential building blocks for creating well-structured domain layers in complex business applications.</Description>
-    <PackageTags>DDD;Domain-Driven-Design;CQRS;Clean-Architecture;Modular-Monolith;Microservices;SharedKernel;Repository;Specification;MediatR;Entity-Framework</PackageTags>
-    <PackageProjectUrl>https://github.com/raziee/Raziee</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReleaseNotes>Initial release of Raziee.SharedKernel - A comprehensive DDD foundation library</PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <DevelopmentDependency>false</DevelopmentDependency>
-    <PackageLanguage>en-US</PackageLanguage>
-  </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>Raziee.SharedKernel</PackageId>
