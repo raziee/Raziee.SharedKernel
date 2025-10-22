@@ -48,12 +48,4 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     
     - name: Run tests
-      run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
-    
-    - name: Generate test report
-      uses: dorny/test-reporter@v1
-      if: always()
-      with:
-        name: Test Results (${{ matrix.os }})
-        path: '**/TestResults/**/*.trx'
-        reporter: dotnet-trx
+      run: dotnet test --configuration Release --no-build --verbosity normal
