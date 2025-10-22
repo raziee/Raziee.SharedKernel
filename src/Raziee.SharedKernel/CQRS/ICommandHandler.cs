@@ -17,5 +17,5 @@ public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand>
 /// <typeparam name="TCommand">The type of command to handle</typeparam>
 /// <typeparam name="TResponse">The type of the response</typeparam>
 public interface ICommandHandler<in TCommand, TResponse>
-    : MediatR.IRequestHandler<TCommand, TResponse>
+    : IRequestHandler<TCommand, TResponse>
     where TCommand : ICommand<TResponse> { }
