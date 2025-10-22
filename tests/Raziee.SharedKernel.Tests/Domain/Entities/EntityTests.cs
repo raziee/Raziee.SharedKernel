@@ -54,8 +54,7 @@ public class EntityTests
 
     private class TestEntity : Entity<Guid>
     {
-        public TestEntity(Guid id) : base(id)
-        {
-        }
+        public TestEntity(Guid id)
+            : base(id) { }
     }
 }

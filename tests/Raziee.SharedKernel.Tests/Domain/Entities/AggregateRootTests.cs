@@ -67,9 +67,8 @@ public class AggregateRootTests
 
     private class TestAggregateRoot : AggregateRoot<Guid>
     {
-        public TestAggregateRoot(Guid id) : base(id)
-        {
-        }
+        public TestAggregateRoot(Guid id)
+            : base(id) { }
 
         public new void AddDomainEvent(IDomainEvent domainEvent)
         {
@@ -82,7 +81,5 @@ public class AggregateRootTests
         }
     }
 
-    private class TestDomainEvent : DomainEvent
-    {
-    }
+    private class TestDomainEvent : DomainEvent { }
 }

@@ -27,7 +27,7 @@ public class SpecificationTests : IDisposable
         {
             new TestEntity(Guid.NewGuid(), "John", 25),
             new TestEntity(Guid.NewGuid(), "Jane", 30),
-            new TestEntity(Guid.NewGuid(), "Bob", 35)
+            new TestEntity(Guid.NewGuid(), "Bob", 35),
         };
 
         _context.TestEntities.AddRange(entities);
@@ -52,7 +52,7 @@ public class SpecificationTests : IDisposable
         {
             new TestEntity(Guid.NewGuid(), "John", 25),
             new TestEntity(Guid.NewGuid(), "Jane", 30),
-            new TestEntity(Guid.NewGuid(), "Bob", 35)
+            new TestEntity(Guid.NewGuid(), "Bob", 35),
         };
 
         _context.TestEntities.AddRange(entities);
@@ -78,7 +78,7 @@ public class SpecificationTests : IDisposable
         {
             new TestEntity(Guid.NewGuid(), "Charlie", 30),
             new TestEntity(Guid.NewGuid(), "Alice", 25),
-            new TestEntity(Guid.NewGuid(), "Bob", 35)
+            new TestEntity(Guid.NewGuid(), "Bob", 35),
         };
 
         _context.TestEntities.AddRange(entities);
@@ -101,7 +101,8 @@ public class SpecificationTests : IDisposable
     public void Specification_WithPaging_ShouldReturnPagedResults()
     {
         // Arrange
-        var entities = Enumerable.Range(1, 10)
+        var entities = Enumerable
+            .Range(1, 10)
             .Select(i => new TestEntity(Guid.NewGuid(), $"Name{i}", 20 + i))
             .ToArray();
 
@@ -148,7 +149,7 @@ public class SpecificationTests : IDisposable
         {
             new TestEntity(Guid.NewGuid(), "John", 25),
             new TestEntity(Guid.NewGuid(), "Jane", 30),
-            new TestEntity(Guid.NewGuid(), "Bob", 35)
+            new TestEntity(Guid.NewGuid(), "Bob", 35),
         };
 
         _context.TestEntities.AddRange(entities);
@@ -179,7 +180,8 @@ public class TestEntity : Entity<Guid>
     public string Name { get; private set; }
     public int Age { get; private set; }
 
-    public TestEntity(Guid id, string name, int age) : base(id)
+    public TestEntity(Guid id, string name, int age)
+        : base(id)
     {
         Name = name;
         Age = age;
@@ -231,7 +233,8 @@ public class TestEntityCombinedSpecification : BaseSpecification<TestEntity, Gui
 {
     public TestEntityCombinedSpecification(
         TestEntityByNameSpecification nameSpec,
-        TestEntityByAgeRangeSpecification ageSpec)
+        TestEntityByAgeRangeSpecification ageSpec
+    )
     {
         AddCriteria(nameSpec.Criteria!);
         AddCriteria(ageSpec.Criteria!);
@@ -241,9 +244,8 @@ public class TestEntityCombinedSpecification : BaseSpecification<TestEntity, Gui
 // Test DbContext for specification tests
 public class TestDbContext : DbContext
 {
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    {
-    }
+    public TestDbContext(DbContextOptions<TestDbContext> options)
+        : base(options) { }
 
     public DbSet<TestEntity> TestEntities { get; set; } = null!;
 
@@ -263,7 +265,8 @@ public static class QueryableExtensions
 {
     public static IQueryable<TEntity> ApplySpecification<TEntity, TId>(
         this IQueryable<TEntity> query,
-        BaseSpecification<TEntity, TId> specification)
+        BaseSpecification<TEntity, TId> specification
+    )
         where TEntity : Entity<TId>
         where TId : notnull
     {
@@ -287,7 +290,9 @@ public static class QueryableExtensions
         }
         else if (specification.ThenByDescending != null)
         {
-            query = ((IOrderedQueryable<TEntity>)query).ThenByDescending(specification.ThenByDescending);
+            query = ((IOrderedQueryable<TEntity>)query).ThenByDescending(
+                specification.ThenByDescending
+            );
         }
 
         if (specification.Skip > 0)

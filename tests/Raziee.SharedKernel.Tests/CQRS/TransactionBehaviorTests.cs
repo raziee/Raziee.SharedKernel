@@ -1,5 +1,4 @@
 using FluentAssertions;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Raziee.SharedKernel.CQRS;
@@ -18,7 +17,10 @@ public class TransactionBehaviorTests
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _loggerMock = new Mock<ILogger<TransactionBehavior<TestRequest, TestResponse>>>();
-        _behavior = new TransactionBehavior<TestRequest, TestResponse>(_unitOfWorkMock.Object, _loggerMock.Object);
+        _behavior = new TransactionBehavior<TestRequest, TestResponse>(
+            _unitOfWorkMock.Object,
+            _loggerMock.Object
+        );
     }
 
     [Fact]
@@ -28,7 +30,7 @@ public class TransactionBehaviorTests
         _unitOfWorkMock.Setup(x => x.HasActiveTransaction).Returns(false);
         var request = new TestRequest();
         var response = new TestResponse { Value = "Test" };
-        var next = new Mock<Raziee.SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
+        var next = new Mock<SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ReturnsAsync(response);
 
         // Act
@@ -38,7 +40,10 @@ public class TransactionBehaviorTests
         result.Should().Be(response);
         _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(CancellationToken.None), Times.Once);
         _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(CancellationToken.None), Times.Once);
-        _unitOfWorkMock.Verify(x => x.RollbackTransactionAsync(CancellationToken.None), Times.Never);
+        _unitOfWorkMock.Verify(
+            x => x.RollbackTransactionAsync(CancellationToken.None),
+            Times.Never
+        );
     }
 
     [Fact]
@@ -48,7 +53,7 @@ public class TransactionBehaviorTests
         _unitOfWorkMock.Setup(x => x.HasActiveTransaction).Returns(true);
         var request = new TestRequest();
         var response = new TestResponse { Value = "Test" };
-        var next = new Mock<Raziee.SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
+        var next = new Mock<SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ReturnsAsync(response);
 
         // Act
@@ -58,7 +63,10 @@ public class TransactionBehaviorTests
         result.Should().Be(response);
         _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(CancellationToken.None), Times.Never);
         _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(CancellationToken.None), Times.Never);
-        _unitOfWorkMock.Verify(x => x.RollbackTransactionAsync(CancellationToken.None), Times.Never);
+        _unitOfWorkMock.Verify(
+            x => x.RollbackTransactionAsync(CancellationToken.None),
+            Times.Never
+        );
     }
 
     [Fact]
@@ -68,12 +76,13 @@ public class TransactionBehaviorTests
         _unitOfWorkMock.Setup(x => x.HasActiveTransaction).Returns(false);
         var request = new TestRequest();
         var exception = new InvalidOperationException("Test exception");
-        var next = new Mock<Raziee.SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
+        var next = new Mock<SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ThrowsAsync(exception);
 
         // Act & Assert
         var thrownException = await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _behavior.Handle(request, next.Object, CancellationToken.None));
+            () => _behavior.Handle(request, next.Object, CancellationToken.None)
+        );
 
         thrownException.Should().Be(exception);
         _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(CancellationToken.None), Times.Once);
@@ -88,7 +97,7 @@ public class TransactionBehaviorTests
         _unitOfWorkMock.Setup(x => x.HasActiveTransaction).Returns(false);
         var request = new TestRequest();
         var response = new TestResponse { Value = "Test" };
-        var next = new Mock<Raziee.SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
+        var next = new Mock<SharedKernel.CQRS.RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ReturnsAsync(response);
         var cancellationToken = new CancellationToken();
 

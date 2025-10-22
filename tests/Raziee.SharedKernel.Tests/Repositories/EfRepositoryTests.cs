@@ -62,7 +62,7 @@ public class EfRepositoryTests : IDisposable
         var entity1 = new TestEntity(Guid.NewGuid(), "Test 1");
         var entity2 = new TestEntity(Guid.NewGuid(), "Test 2");
         var entity3 = new TestEntity(Guid.NewGuid(), "Test 3");
-        
+
         await _context.TestEntities.AddRangeAsync(entity1, entity2, entity3);
         await _context.SaveChangesAsync();
 
@@ -83,7 +83,7 @@ public class EfRepositoryTests : IDisposable
         // Arrange
         var entity1 = new TestEntity(Guid.NewGuid(), "Test 1");
         var entity2 = new TestEntity(Guid.NewGuid(), "Test 2");
-        
+
         await _context.TestEntities.AddRangeAsync(entity1, entity2);
         await _context.SaveChangesAsync();
 
@@ -100,10 +100,11 @@ public class EfRepositoryTests : IDisposable
     public async Task GetPagedAsync_WithValidParameters_ShouldReturnPagedResult()
     {
         // Arrange
-        var entities = Enumerable.Range(1, 10)
+        var entities = Enumerable
+            .Range(1, 10)
             .Select(i => new TestEntity(Guid.NewGuid(), $"Test {i}"))
             .ToList();
-        
+
         await _context.TestEntities.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
 
@@ -125,7 +126,7 @@ public class EfRepositoryTests : IDisposable
         // Arrange
         var entity1 = new TestEntity(Guid.NewGuid(), "Test 1");
         var entity2 = new TestEntity(Guid.NewGuid(), "Test 2");
-        
+
         await _context.TestEntities.AddRangeAsync(entity1, entity2);
         await _context.SaveChangesAsync();
 
@@ -212,7 +213,7 @@ public class EfRepositoryTests : IDisposable
         var entities = new[]
         {
             new TestEntity(Guid.NewGuid(), "Test 1"),
-            new TestEntity(Guid.NewGuid(), "Test 2")
+            new TestEntity(Guid.NewGuid(), "Test 2"),
         };
 
         // Act
@@ -300,7 +301,8 @@ public class TestEntity : Entity<Guid>
 {
     public string Name { get; private set; }
 
-    public TestEntity(Guid id, string name) : base(id)
+    public TestEntity(Guid id, string name)
+        : base(id)
     {
         Name = name;
     }
@@ -314,9 +316,8 @@ public class TestEntity : Entity<Guid>
 // Test DbContext for repository tests
 public class TestDbContext : DbContext
 {
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    {
-    }
+    public TestDbContext(DbContextOptions<TestDbContext> options)
+        : base(options) { }
 
     public DbSet<TestEntity> TestEntities { get; set; } = null!;
 

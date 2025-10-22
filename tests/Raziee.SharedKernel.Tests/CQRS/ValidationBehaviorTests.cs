@@ -1,7 +1,6 @@
 using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Raziee.SharedKernel.CQRS;
 using Xunit;
@@ -16,12 +15,17 @@ public class ValidationBehaviorTests
         // Arrange
         var services = new ServiceCollection();
         services.AddLogging();
-        services.AddScoped<IPipelineBehavior<TestRequest, TestResponse>, ValidationBehavior<TestRequest, TestResponse>>();
+        services.AddScoped<
+            IPipelineBehavior<TestRequest, TestResponse>,
+            ValidationBehavior<TestRequest, TestResponse>
+        >();
         services.AddScoped<IValidator<TestRequest>, TestValidator>();
-        
+
         var serviceProvider = services.BuildServiceProvider();
-        var behavior = serviceProvider.GetRequiredService<IPipelineBehavior<TestRequest, TestResponse>>();
-        
+        var behavior = serviceProvider.GetRequiredService<
+            IPipelineBehavior<TestRequest, TestResponse>
+        >();
+
         var request = new TestRequest { Name = "Test" };
         var next = new Mock<RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ReturnsAsync(new TestResponse { Result = "Success" });
@@ -41,17 +45,23 @@ public class ValidationBehaviorTests
         // Arrange
         var services = new ServiceCollection();
         services.AddLogging();
-        services.AddScoped<IPipelineBehavior<TestRequest, TestResponse>, ValidationBehavior<TestRequest, TestResponse>>();
+        services.AddScoped<
+            IPipelineBehavior<TestRequest, TestResponse>,
+            ValidationBehavior<TestRequest, TestResponse>
+        >();
         services.AddScoped<IValidator<TestRequest>, TestValidator>();
-        
+
         var serviceProvider = services.BuildServiceProvider();
-        var behavior = serviceProvider.GetRequiredService<IPipelineBehavior<TestRequest, TestResponse>>();
-        
+        var behavior = serviceProvider.GetRequiredService<
+            IPipelineBehavior<TestRequest, TestResponse>
+        >();
+
         var request = new TestRequest { Name = "" }; // Invalid
         var next = new Mock<RequestHandlerDelegate<TestResponse>>();
 
         // Act & Assert
-        var action = async () => await behavior.Handle(request, next.Object, CancellationToken.None);
+        var action = async () =>
+            await behavior.Handle(request, next.Object, CancellationToken.None);
         await action.Should().ThrowAsync<ValidationException>();
         next.Verify(x => x(), Times.Never);
     }
@@ -62,11 +72,16 @@ public class ValidationBehaviorTests
         // Arrange
         var services = new ServiceCollection();
         services.AddLogging();
-        services.AddScoped<IPipelineBehavior<TestRequest, TestResponse>, ValidationBehavior<TestRequest, TestResponse>>();
-        
+        services.AddScoped<
+            IPipelineBehavior<TestRequest, TestResponse>,
+            ValidationBehavior<TestRequest, TestResponse>
+        >();
+
         var serviceProvider = services.BuildServiceProvider();
-        var behavior = serviceProvider.GetRequiredService<IPipelineBehavior<TestRequest, TestResponse>>();
-        
+        var behavior = serviceProvider.GetRequiredService<
+            IPipelineBehavior<TestRequest, TestResponse>
+        >();
+
         var request = new TestRequest { Name = "Test" };
         var next = new Mock<RequestHandlerDelegate<TestResponse>>();
         next.Setup(x => x()).ReturnsAsync(new TestResponse { Result = "Success" });

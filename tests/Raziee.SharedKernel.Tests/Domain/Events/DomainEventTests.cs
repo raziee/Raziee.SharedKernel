@@ -47,12 +47,10 @@ public class DomainEventTests
 
     private class TestDomainEvent : DomainEvent
     {
-        public TestDomainEvent() : base()
-        {
-        }
+        public TestDomainEvent()
+            : base() { }
 
-        public TestDomainEvent(int version) : base(version)
-        {
-        }
+        public TestDomainEvent(int version)
+            : base(version) { }
     }
 }
