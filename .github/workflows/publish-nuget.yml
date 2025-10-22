@@ -8,6 +8,11 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
 env:
   DOTNET_VERSION: '8.0.x'
   PACKAGE_NAME: 'Raziee.SharedKernel'
@@ -130,12 +135,10 @@ jobs:
       run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
     
     - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
         body: |
           ## What's Changed
           
@@ -162,3 +165,4 @@ jobs:
           - [API Documentation](https://github.com/raziee/Raziee.SharedKernel)
         draft: false
         prerelease: false
+        files: ./artifacts/*.nupkg
