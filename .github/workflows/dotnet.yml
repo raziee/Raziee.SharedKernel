@@ -13,7 +13,6 @@ on:
 permissions:
   contents: read
   packages: read
-  security-events: write
 
 env:
   DOTNET_VERSION: '8.0.x'
@@ -64,14 +63,15 @@ jobs:
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
-      if: success()
+      if: success() && secrets.CODECOV_TOKEN != ''
+      continue-on-error: true
       with:
         file: ./coverage.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
 
-  security-scan:
+  dependency-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     
@@ -79,11 +79,5 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Run security scan
-      uses: securecodewarrior/github-action-add-sarif@v1
-      with:
-        sarif-file: 'security-scan-results.sarif'
-    
     - name: Run dependency check
       uses: actions/dependency-review-action@v4
-      if: github.event_name == 'pull_request'

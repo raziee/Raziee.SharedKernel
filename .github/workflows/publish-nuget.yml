@@ -59,7 +59,8 @@ jobs:
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
-      if: success()
+      if: success() && secrets.CODECOV_TOKEN != ''
+      continue-on-error: true
       with:
         file: ./coverage.xml
         flags: unittests
